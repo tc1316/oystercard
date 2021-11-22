@@ -10,6 +10,10 @@ describe Oystercard do
     expect(oystercard.balance).to be(0)
   end
 
+  it "has a default empty list of journeys" do
+    expect(oystercard.journeys).to be_empty
+  end
+
   context "when topping up" do 
     it "can be topped up" do
       oystercard.top_up(10)
@@ -74,6 +78,13 @@ describe Oystercard do
       oystercard.touch_in(entry_station)
       oystercard.touch_out(exit_station)
       expect(oystercard.journeys[0]).to include(journey)
+    end
+
+    it "makes one journey when touching in and then touching out" do
+      oystercard.top_up(Oystercard::MIN_BALANCE)
+      oystercard.touch_in(entry_station)
+      oystercard.touch_out(exit_station)
+      expect(oystercard.journeys.length).to be(1)
     end
 
     
