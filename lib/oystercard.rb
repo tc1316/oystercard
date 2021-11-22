@@ -1,5 +1,6 @@
 class Oystercard
   MAX_BALANCE = 90
+  MIN_BALANCE = 1
   attr_reader :balance, :in_journey
 
   def initialize(balance=0)
@@ -17,6 +18,7 @@ class Oystercard
   end
 
   def touch_in
+    raise "Balance below minimum of #{Oystercard::MIN_BALANCE}" unless min?
     @in_journey = true
   end
 
@@ -27,11 +29,14 @@ class Oystercard
   def in_journey?
     @in_journey
   end
-  
+
   private
 
   def full?(amount)
     balance + amount > MAX_BALANCE 
   end
 
+  def min?
+    balance >= MIN_BALANCE
+  end
 end

@@ -29,6 +29,10 @@ describe Oystercard do
       oystercard.touch_in
       expect(oystercard.in_journey?).to be_truthy
     end
+
+    it "checks if card has at least minimum amount" do
+      expect{ oystercard.touch_in }.to raise_error("Balance below minimum of #{Oystercard::MIN_BALANCE}")
+    end
   end
 
   context "when touching out" do
