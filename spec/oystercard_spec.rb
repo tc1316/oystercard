@@ -19,8 +19,8 @@ describe Oystercard do
 
   context "when paying" do
     it "deducts fare from balance" do
-      oystercard.deduct
-      expect(oystercard.balance).to be(-3)
+      oystercard.touch_out
+      expect(oystercard.balance).to be(-Oystercard::FARE)
     end
   end
 
@@ -43,5 +43,10 @@ describe Oystercard do
       oystercard.touch_out
       expect(oystercard.in_journey?).to be_falsey
     end
+
+    it "the card should deduct the minimum fare from balance" do
+      expect{oystercard.touch_out}.to change{oystercard.balance}.by(-Oystercard::MIN_BALANCE)
+    end
+
   end
 end
