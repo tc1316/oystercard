@@ -26,6 +26,7 @@ describe Oystercard do
 
   context "when touching in" do
     it "the card should be identified as undergoing a journey" do
+      oystercard.top_up(Oystercard::MIN_BALANCE)
       oystercard.touch_in
       expect(oystercard.in_journey?).to be_truthy
     end
@@ -37,12 +38,10 @@ describe Oystercard do
 
   context "when touching out" do
     it "the card should be identified as no longer in a journey" do
+      oystercard.top_up(Oystercard::MIN_BALANCE)
       oystercard.touch_in
       oystercard.touch_out
       expect(oystercard.in_journey?).to be_falsey
     end
   end
-
-
-
 end
