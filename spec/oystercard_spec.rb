@@ -15,6 +15,13 @@ describe Oystercard do
     it "cannot be topped up beyond max balance" do
       expect{oystercard.top_up(Oystercard::MAX_BALANCE+0.01)}.to raise_error("Cannot top up beyond #{Oystercard::MAX_BALANCE}")
     end
+
+  context "when paying" do
+    it "deducts fare from balance" do
+      oystercard.deduct
+      expect(oystercard.balance).to be(-3)
+    end
+  end
   end
 
 end

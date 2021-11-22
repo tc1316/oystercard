@@ -11,6 +11,10 @@ class Oystercard
     @balance += amount
   end
 
+  def deduct(fare=3)
+    @balance -= fare
+  end
+  
   private
 
   def full?(amount)
