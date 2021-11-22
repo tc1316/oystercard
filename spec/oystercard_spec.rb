@@ -2,6 +2,7 @@ require 'oystercard'
 
 describe Oystercard do
   subject(:oystercard) { described_class.new }
+  let(:entry_station) { double(name: "London Bridge")}
 
   it "has default balance of 0" do
     expect(oystercard.balance).to be(0)
@@ -33,6 +34,11 @@ describe Oystercard do
 
     it "checks if card has at least minimum amount" do
       expect{ oystercard.touch_in }.to raise_error("Balance below minimum of #{Oystercard::MIN_BALANCE}")
+    end
+
+    it "remembers the entry station" do
+      oystercard.touch_in(entry_station)
+      expect(oystercard.entry_station).to be(entry_station.name)
     end
   end
 
