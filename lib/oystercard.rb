@@ -2,7 +2,7 @@ class Oystercard
   MAX_BALANCE = 90
   MIN_BALANCE = 1
   FARE = 1
-  attr_reader :balance, :in_journey
+  attr_reader :balance, :in_journey, :entry_station
 
   def initialize(balance=0)
     @balance = balance
@@ -14,8 +14,9 @@ class Oystercard
     @balance += amount
   end
 
-  def touch_in
+  def touch_in(entry_station)
     raise "Balance below minimum of #{Oystercard::MIN_BALANCE}" unless min?
+    @entry_station = entry_station
     @in_journey = true
   end
 

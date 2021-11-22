@@ -2,7 +2,7 @@ require 'oystercard'
 
 describe Oystercard do
   subject(:oystercard) { described_class.new }
-  let(:entry_station) { double(name: "London Bridge")}
+  let(:entry_station) { double("Aldgate East")}
 
   it "has default balance of 0" do
     expect(oystercard.balance).to be(0)
@@ -28,30 +28,38 @@ describe Oystercard do
   context "when touching in" do
     it "the card should be identified as undergoing a journey" do
       oystercard.top_up(Oystercard::MIN_BALANCE)
-      oystercard.touch_in
+      oystercard.touch_in(entry_station)
       expect(oystercard.in_journey?).to be_truthy
     end
 
     it "checks if card has at least minimum amount" do
-      expect{ oystercard.touch_in }.to raise_error("Balance below minimum of #{Oystercard::MIN_BALANCE}")
+      expect{ oystercard.touch_in(entry_station) }.to raise_error("Balance below minimum of #{Oystercard::MIN_BALANCE}")
     end
 
     it "remembers the entry station" do
+      oystercard.top_up(Oystercard::MIN_BALANCE)
       oystercard.touch_in(entry_station)
-      expect(oystercard.entry_station).to be(entry_station.name)
+      expect(oystercard.entry_station).to be(entry_station)
     end
   end
 
   context "when touching out" do
     it "the card should be identified as no longer in a journey" do
       oystercard.top_up(Oystercard::MIN_BALANCE)
-      oystercard.touch_in
+      oystercard.touch_in(entry_station)
       oystercard.touch_out
       expect(oystercard.in_journey?).to be_falsey
     end
 
     it "the card should deduct the minimum fare from balance" do
       expect{oystercard.touch_out}.to change{oystercard.balance}.by(-Oystercard::MIN_BALANCE)
+    end
+
+    it "forgets entry station" do
+      oystercard.top_up(Oystercard::MIN_BALANCE)
+      oystercard.touch_in(entry_station)
+      oystercard.touch_out
+      expect(oystercard.entry_station).to be(nil)
     end
 
   end
