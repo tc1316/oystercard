@@ -90,7 +90,7 @@ describe Oystercard do
   end
 
   it "stores incomplete journeys" do
-    oystercard.top_up(Oystercard::PENALTY_FARE)
+    oystercard.top_up(Journey::PENALTY_FARE)
     oystercard.touch_in(entry_station)
     expect(oystercard.journeys.length).to be(1)
   end

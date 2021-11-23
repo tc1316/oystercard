@@ -1,6 +1,7 @@
 class Oystercard
   MAX_BALANCE = 90
   MIN_BALANCE = 1
+  PREVIOUS_JOURNEY = -2
 
   attr_reader :balance, :journeys, :journey
 
@@ -18,23 +19,44 @@ class Oystercard
 
   def touch_in(entry_station)
     raise "Balance below minimum of #{Oystercard::MIN_BALANCE}" unless min?
+
     @journey = Journey.new
-    @journey.penalize_on_touch_in if @in_journey == true
-    @journey.assign_entry_station(entry_station)
+
+    @journeys << @journey #[entry=nil,exit=nil, fare = 1]
+
+    if @in_journey == true #[entry=nil,exit=nil, fare = 7]
+      @journeys[PREVIOUS_JOURNEY].penalize
+
+      deduct(Journey::PENALTY_FARE)
+    end
+
+    @journeys.last.assign_entry_station(entry_station) #[entry=entry_station,exit=nil, fare = 7]
+
     @in_journey = true
   end
 
   def touch_out(exit_station)
     if @journey == nil
       @journey = Journey.new 
-      @journey.penalize_on_touch_out
+
+      @journeys << @journey #[entry=nil,exit=nil, fare = 1]
+
+      @journeys.last.penalize #[entry=nil,exit=nil, fare = 6]
+
       deduct(Journey::PENALTY_FARE)
+
+      @journeys.last.assign_exit_station(exit_station) #[entry=entry_station,exit=exit_station, fare = 1 || 6]
+
     else
-      deduct(Journey::DEFAULT_FARE)    
+      deduct(Journey::DEFAULT_FARE) #Oystercard @balance -= 1 
+  
+      @journeys.last.assign_exit_station(exit_station) #[entry=entry_station,exit=exit_station, fare = 1 || 6]
+    
     end
-    @journey.assign_exit_station(exit_station)
-    @journeys << @journey
+
     @in_journey = false
+    # @journey = nil
+
   end
 
   def in_journey?

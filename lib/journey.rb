@@ -16,11 +16,7 @@ class Journey
     @exit_station = exit_station
   end
 
-  def penalize_on_touch_in
-    @fare += PENALTY_FARE
-  end
-
-  def penalize_on_touch_out
+  def penalize
     @fare = PENALTY_FARE
   end
 
