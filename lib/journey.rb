@@ -18,6 +18,7 @@ class Journey
 
   def penalize
     @fare = PENALTY_FARE
+    @fare
   end
 
   def read_fare

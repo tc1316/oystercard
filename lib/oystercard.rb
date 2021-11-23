@@ -24,10 +24,10 @@ class Oystercard
 
     @journeys << @journey #[entry=nil,exit=nil, fare = 1]
 
-    if @in_journey == true #[entry=nil,exit=nil, fare = 7]
+    if @in_journey == true #[entry=nil,exit=nil, fare = 6]
       @journeys[PREVIOUS_JOURNEY].penalize
 
-      deduct(Journey::PENALTY_FARE)
+      deduct(@journeys[PREVIOUS_JOURNEY].penalize)
     end
 
     @journeys.last.assign_entry_station(entry_station) #[entry=entry_station,exit=nil, fare = 7]
@@ -43,12 +43,12 @@ class Oystercard
 
       @journeys.last.penalize #[entry=nil,exit=nil, fare = 6]
 
-      deduct(Journey::PENALTY_FARE)
+      deduct(@journeys.last.penalize)
 
       @journeys.last.assign_exit_station(exit_station) #[entry=entry_station,exit=exit_station, fare = 1 || 6]
 
     else
-      deduct(Journey::DEFAULT_FARE) #Oystercard @balance -= 1 
+      deduct(@journeys.last.read_fare) #Oystercard @balance -= 1 
   
       @journeys.last.assign_exit_station(exit_station) #[entry=entry_station,exit=exit_station, fare = 1 || 6]
     
