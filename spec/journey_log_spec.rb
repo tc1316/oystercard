@@ -17,4 +17,8 @@ describe JourneyLog do
     journey_log.finish(exit_station)
     expect(journey_log.journey.exit).to eq("Tower Hill")
   end
+
+  it 'returns a list of journeys' do
+    expect(journey_log.journeys).to be_empty
+  end
 end

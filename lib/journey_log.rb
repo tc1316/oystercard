@@ -11,7 +11,7 @@ class JourneyLog
 
   def start(entry_station)
     @journey.assign_entry_station(entry_station)
-    # @journeys << @journey_class.journey
+    @journeys << @journey
   end
 
   def finish(exit_station)
