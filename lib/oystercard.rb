@@ -8,6 +8,7 @@ class Oystercard
     @balance = balance
     @in_journey = false
     @journeys = [] #Contains multiple journey objects
+    @journey = nil
   end
 
   def top_up(amount)
@@ -17,16 +18,23 @@ class Oystercard
 
   def touch_in(entry_station)
     raise "Balance below minimum of #{Oystercard::MIN_BALANCE}" unless min?
-    @journey = Journey.new(entry_station)
+    @journey = Journey.new
+    @journey.penalize_on_touch_in if @in_journey == true
+    @journey.assign_entry_station(entry_station)
     @in_journey = true
   end
 
   def touch_out(exit_station)
-    deduct(MIN_BALANCE)
-    @journey.end_journey(exit_station)
+    if @journey == nil
+      @journey = Journey.new 
+      @journey.penalize_on_touch_out
+      deduct(Journey::PENALTY_FARE)
+    else
+      deduct(Journey::DEFAULT_FARE)    
+    end
+    @journey.assign_exit_station(exit_station)
     @journeys << @journey
     @in_journey = false
-
   end
 
   def in_journey?
@@ -43,7 +51,7 @@ class Oystercard
     balance >= MIN_BALANCE
   end
 
-  def deduct(fare=FARE)
+  def deduct(fare)
     @balance -= fare
   end
 

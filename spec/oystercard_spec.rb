@@ -88,4 +88,11 @@ describe Oystercard do
       expect(oystercard.journeys.length).to be(1)
     end
   end
+
+  it "stores incomplete journeys" do
+    oystercard.top_up(Oystercard::PENALTY_FARE)
+    oystercard.touch_in(entry_station)
+    expect(oystercard.journeys.length).to be(1)
+  end
+
 end

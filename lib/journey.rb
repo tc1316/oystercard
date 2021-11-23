@@ -1,16 +1,33 @@
 class Journey
-  FARE = 1
+  DEFAULT_FARE = 1
+  PENALTY_FARE = 6
 
-  def initialize(entry_station)
-    @entry_station = entry_station
+  def initialize
+    @entry_station = nil
     @exit_station = nil
+    @fare = DEFAULT_FARE
   end
 
-  def end_journey(exit_station)
+  def assign_entry_station(entry_station)
+    @entry_station = entry_station
+  end
+
+  def assign_exit_station(exit_station)
     @exit_station = exit_station
   end
 
+  def penalize_on_touch_in
+    @fare += PENALTY_FARE
+  end
 
+  def penalize_on_touch_out
+    @fare = PENALTY_FARE
+  end
+
+  def read_fare
+    "#{@fare}".to_i 
+  end
+      
   def entry
     "#{@entry_station}"
   end
@@ -18,9 +35,13 @@ class Journey
   def exit
     "#{@exit_station}"
   end
+ 
+  def complete?
+    return true if @entry_station && @exit_station
+  end
 
   private  
-  attr_reader :entry_station, :exit_station
+  attr_reader :entry_station, :exit_station, :fare
 
   def deduct(fare=FARE)
     @balance -= fare
