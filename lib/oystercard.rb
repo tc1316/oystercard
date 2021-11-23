@@ -1,4 +1,4 @@
-require 'journey_log'
+require_relative "./journey_log"
 
 class Oystercard
   MAX_BALANCE = 90
@@ -21,23 +21,27 @@ class Oystercard
 
   def touch_in(entry_station)
     raise "Balance below minimum of #{Oystercard::MIN_BALANCE}" unless min?
+
     @journey_log.start(entry_station)
-    # if @in_journey == true 
-    #  @journeys[PREVIOUS_JOURNEY].penalize
-    #  deduct(@journey_log.journeys[PREVIOUS_JOURNEY].penalize)
-    # end
+
+    if @in_journey == true 
+      @journey_log.journeys[PREVIOUS_JOURNEY].penalize
+      deduct(@journey_log.journeys[PREVIOUS_JOURNEY].penalize)
+    end
+
     @in_journey = true
   end
 
   def touch_out(exit_station)
-    # if @journey == nil
-    #   @journeys.last.penalize 
-    #   deduct(@journeys.last.penalize)
-    # else
-    #   deduct(@journeys.last.read_fare) 
-    
-    # end
+
     @journey_log.finish(exit_station)
+    if @journey_log.journey.entry == ""
+      @journey_log.journey.penalize 
+      deduct(@journey_log.journey.penalize)
+    else
+      deduct(@journey_log.journey.read_fare) 
+    end
+
     @in_journey = false
 
   end

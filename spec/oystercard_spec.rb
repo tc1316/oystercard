@@ -78,7 +78,7 @@ describe Oystercard do
       oystercard.top_up(Oystercard::MIN_BALANCE)
       oystercard.touch_in(entry_station)
       oystercard.touch_out(exit_station)
-      expect(oystercard.journey_log.journeys).to include(oystercard.journey)
+      expect(oystercard.journey_log.journeys).to include(oystercard.journey_log.journey)
     end
 
     it "makes one journey when touching in and then touching out" do

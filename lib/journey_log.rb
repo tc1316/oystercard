@@ -1,4 +1,4 @@
-require 'journey'
+require_relative "./journey"
 
 class JourneyLog
 
@@ -6,15 +6,22 @@ class JourneyLog
 
   def initialize(journey_class = Journey)
     @journeys = []
-    @journey = journey_class.new
+    @journey_class = journey_class
   end
 
   def start(entry_station)
+    @journey = @journey_class.new
     @journey.assign_entry_station(entry_station)
     @journeys << @journey
   end
 
   def finish(exit_station)
-    @journey.assign_exit_station(exit_station)
+    if @journey
+      @journey.assign_exit_station(exit_station)
+    else
+      @journey = @journey_class.new
+      @journey.assign_exit_station(exit_station)
+      @journeys << @journey
+    end
   end
 end
