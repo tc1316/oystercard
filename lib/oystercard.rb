@@ -1,14 +1,15 @@
+require 'journey_log'
+
 class Oystercard
   MAX_BALANCE = 90
   MIN_BALANCE = 1
   PREVIOUS_JOURNEY = -2
 
-  attr_reader :balance, :journeys, :journey
+  attr_reader :balance, :journey
 
   def initialize(balance=0)
     @balance = balance
     @in_journey = false
-    @journeys = [] #Contains multiple journey objects
     @journey = nil
   end
 
@@ -19,20 +20,13 @@ class Oystercard
 
   def touch_in(entry_station)
     raise "Balance below minimum of #{Oystercard::MIN_BALANCE}" unless min?
-
-    @journey = Journey.new
-
-    @journeys << @journey #[entry=nil,exit=nil, fare = 1]
-
-    if @in_journey == true #[entry=nil,exit=nil, fare = 6]
+    @journey = Journey.new(entry_station)
+    JourneyLog.start(entry_station)
+    if in_journey == true 
       @journeys[PREVIOUS_JOURNEY].penalize
-
       deduct(@journeys[PREVIOUS_JOURNEY].penalize)
     end
-
-    @journeys.last.assign_entry_station(entry_station) #[entry=entry_station,exit=nil, fare = 7]
-
-    @in_journey = true
+    in_journey = true
   end
 
   def touch_out(exit_station)

@@ -1,5 +1,6 @@
 require "journey"
 require "oystercard"
+require "journey_log"
 
 describe Journey do
   let(:journey) { described_class.new }
