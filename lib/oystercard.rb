@@ -34,13 +34,15 @@ class Oystercard
 
   def touch_out(exit_station)
 
-    @journey_log.finish(exit_station)
-    if @journey_log.current_journey.entry == ""
-      @journey_log.current_journey.penalize 
-      deduct(@journey_log.current_journey.penalize)
+    if @in_journey == false
+      @journey_log.start(nil)
+      @journey_log.journey.penalize 
+      deduct(@journey_log.journey.penalize)
     else
-      deduct(@journey_log.current_journey.read_fare) 
+      deduct(@journey_log.journey.read_fare) 
     end
+
+    @journey_log.finish(exit_station)
 
     @in_journey = false
 
