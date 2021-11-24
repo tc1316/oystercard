@@ -27,6 +27,10 @@ class JourneyLog
     @journey = nil
   end
 
+  def journeys
+    @journeys.dup
+  end
+
   private
 
   def current_journey

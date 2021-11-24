@@ -47,7 +47,7 @@ describe Oystercard do
     it "creates a journey with the entry station" do
       oystercard.top_up(Oystercard::MIN_BALANCE)
       oystercard.touch_in(entry_station)
-      expect(oystercard.journey_log.current_journey.entry).to eq("#{entry_station}")
+      expect(oystercard.journey_log.journey.entry).to eq("#{entry_station}")
     end
   end
 
@@ -69,7 +69,7 @@ describe Oystercard do
       oystercard.top_up(Oystercard::MIN_BALANCE)
       oystercard.touch_in(entry_station)
       oystercard.touch_out(exit_station)
-      expect(oystercard.journey_log.current_journey.exit).to eq("#{exit_station}")
+      expect(oystercard.journey_log.journeys[0].exit).to eq("#{exit_station}")
     end
   end
 
@@ -78,7 +78,7 @@ describe Oystercard do
       oystercard.top_up(Oystercard::MIN_BALANCE)
       oystercard.touch_in(entry_station)
       oystercard.touch_out(exit_station)
-      expect(oystercard.journey_log.journeys).to include(oystercard.journey_log.current_journey)
+      expect(oystercard.journey_log.journeys).not_to be_empty
     end
 
     it "makes one journey when touching in and then touching out" do

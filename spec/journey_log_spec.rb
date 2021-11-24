@@ -10,12 +10,12 @@ describe JourneyLog do
 
   it 'starts a journey' do
     journey_log.start(entry_station)
-    expect(journey_log.current_journey.entry).to eq("Aldgate East")
+    expect(journey_log.journey.entry).to eq("Aldgate East")
   end
 
   it 'ends a journey' do
     journey_log.finish(exit_station)
-    expect(journey_log.current_journey.exit).to eq("Tower Hill")
+    expect(journey_log.journey).to eq(nil)
   end
 
   it 'returns a list of journeys' do
