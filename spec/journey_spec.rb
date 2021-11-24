@@ -10,13 +10,13 @@ describe Journey do
   
   it "can initialize a journey with an entry station when touching in" do
     oystercard.touch_in(entry_station)
-    expect(oystercard.journey_log.journey.entry).to eq("Aldgate East")
+    expect(oystercard.journey_log.current_journey.entry).to eq("Aldgate East")
   end
 
   it "can finish a journey with an exit station" do 
     oystercard.touch_in(entry_station)
     oystercard.touch_out(exit_station)
-    expect(oystercard.journey_log.journey.exit).to eq("Tower Hill")    
+    expect(oystercard.journey_log.current_journey.exit).to eq("Tower Hill")    
   end
 
   it "can calculate the default journey fare" do
@@ -27,19 +27,19 @@ describe Journey do
 
   it "can calculate the penalty journey fare if no entry station" do
     oystercard.touch_out(exit_station)
-    expect(oystercard.journey_log.journey.read_fare).to eq(6)
+    expect(oystercard.journey_log.current_journey.read_fare).to eq(6)
   end
 
   it "can calculate the penalty journey fare if no exit station" do
     oystercard.touch_out(entry_station)
-    expect(oystercard.journey_log.journey.read_fare).to eq(6)
+    expect(oystercard.journey_log.current_journey.read_fare).to eq(6)
   end
 
 
   it "can return if a journey is complete or not" do
     oystercard.touch_in(entry_station)
     oystercard.touch_out(exit_station)
-    expect(oystercard.journey_log.journey.complete?).to be_truthy
+    expect(oystercard.journey_log.current_journey.complete?).to be_truthy
   end
   
 end

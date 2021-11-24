@@ -4,7 +4,7 @@ describe Oystercard do
   subject(:oystercard) { described_class.new }
   let(:entry_station) { double("Aldgate East")}
   let(:exit_station) { double("Tower Hill")}
-  let(:journey) { {entry_station: entry_station, exit_station: exit_station}}
+  # let(:journey) { {entry_station: entry_station, exit_station: exit_station}}
   
   it "has default balance of 0" do
     expect(oystercard.balance).to be(0)
@@ -47,7 +47,7 @@ describe Oystercard do
     it "creates a journey with the entry station" do
       oystercard.top_up(Oystercard::MIN_BALANCE)
       oystercard.touch_in(entry_station)
-      expect(oystercard.journey_log.journey.entry).to eq("#{entry_station}")
+      expect(oystercard.journey_log.current_journey.entry).to eq("#{entry_station}")
     end
   end
 
@@ -69,7 +69,7 @@ describe Oystercard do
       oystercard.top_up(Oystercard::MIN_BALANCE)
       oystercard.touch_in(entry_station)
       oystercard.touch_out(exit_station)
-      expect(oystercard.journey_log.journey.exit).to eq("#{exit_station}")
+      expect(oystercard.journey_log.current_journey.exit).to eq("#{exit_station}")
     end
   end
 
@@ -78,13 +78,14 @@ describe Oystercard do
       oystercard.top_up(Oystercard::MIN_BALANCE)
       oystercard.touch_in(entry_station)
       oystercard.touch_out(exit_station)
-      expect(oystercard.journey_log.journeys).to include(oystercard.journey_log.journey)
+      expect(oystercard.journey_log.journeys).to include(oystercard.journey_log.current_journey)
     end
 
     it "makes one journey when touching in and then touching out" do
       oystercard.top_up(Oystercard::MIN_BALANCE)
       oystercard.touch_in(entry_station)
       oystercard.touch_out(exit_station)
+      p oystercard.journey_log.journeys
       expect(oystercard.journey_log.journeys.length).to be(1)
     end
   end
