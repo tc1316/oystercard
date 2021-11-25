@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative './journey_log'
+require_relative './station'
 
 # Stores balance, state of journey and initializes a JourneyLog object which itself contains Journey objects
 class Oystercard
@@ -22,8 +23,11 @@ class Oystercard
     @balance += amount
   end
 
-  def touch_in(entry_station, entry_zone)
+  def touch_in(station)
     raise "Balance below minimum of #{Oystercard::MIN_BALANCE}" unless min?
+    entry_station = station.name 
+    entry_zone = station.zone
+
     @journey_log.start(entry_station, entry_zone)
     if @in_journey == true
       @journey_log.journeys[PREVIOUS_JOURNEY].calculate_fare
@@ -32,7 +36,9 @@ class Oystercard
     @in_journey = true
   end
 
-  def touch_out(exit_station, exit_zone)
+  def touch_out(station)
+    exit_station = station.name 
+    exit_zone = station.zone
     if @in_journey == false
       @journey_log.start(nil)
       @journey_log.journey.calculate_fare
