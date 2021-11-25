@@ -1,23 +1,24 @@
-require_relative "./journey"
+# frozen_string_literal: true
 
+require_relative './journey'
+
+# Instantiates Journey objects when called by Oystercard
 class JourneyLog
-
   attr_reader :journey
 
   def initialize(journey_class = Journey)
     @journeys = []
     @journey_class = journey_class
   end
- 
-  def start(entry_station=nil, entry_zone=nil)
+
+  def start(entry_station = nil, entry_zone = nil)
     current_journey
     @journey = @journey_class.new if @journeys.include?(@journey)
     @journey.assign_entry_station_and_zone(entry_station, entry_zone)
     @journeys << @journey
   end
 
-
-  def finish(exit_station=nil, exit_zone=nil)
+  def finish(exit_station = nil, exit_zone = nil)
     current_journey
     @journeys << @journey unless @journeys.include?(@journey)
     @journey.assign_exit_station_and_zone(exit_station, exit_zone)
@@ -34,5 +35,4 @@ class JourneyLog
   def current_journey
     @journey ||= @journey_class.new
   end
-
 end

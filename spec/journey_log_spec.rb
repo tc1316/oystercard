@@ -1,10 +1,11 @@
-require 'journey_log'
+# frozen_string_literal: true
 
+require 'journey_log'
 
 describe JourneyLog do
   subject(:journey_log) { described_class.new(Journey) }
-  let(:entry_station) { "Aldgate East" } 
-  let(:exit_station) { "Tower Hill" }
+  let(:entry_station) { 'Aldgate East' }
+  let(:exit_station) { 'Tower Hill' }
   let(:entry_zone) { 1 }
   let(:exit_zone) { 2 }
 
@@ -14,12 +15,12 @@ describe JourneyLog do
   end
 
   it 'ends a journey' do
-    2.times {journey_log.finish(exit_station, exit_zone)}
+    2.times { journey_log.finish(exit_station, exit_zone) }
     expect(journey_log.journeys.length).to eq(2)
   end
 
   it 'returns a list of journeys' do
-    5.times do 
+    5.times do
       journey_log.start(entry_station, entry_zone)
       journey_log.finish(exit_station, exit_zone)
     end
@@ -32,5 +33,4 @@ describe JourneyLog do
   #   i.finish(exit_station)
   #   expect(journey_log.journeys).to eq(i.journeys)
   # end
-
 end
