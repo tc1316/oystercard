@@ -33,11 +33,24 @@ describe Journey do
   it 'can return if a journey is complete' do
     journey.assign_entry_station_and_zone(entry_station, entry_zone)
     journey.assign_exit_station_and_zone(exit_station, entry_zone)
-    expect(journey.complete?).to be_truthy
+    expect(journey).to be_complete
   end
 
   it 'can return if a journey is incomplete' do
     journey.assign_entry_station_and_zone(entry_station, entry_zone)
-    expect(journey.complete?).to be_falsey
+    expect(journey).not_to be_complete
+  end
+
+  it 'can calculate a fare for zone 1 to zone 1' do
+    journey.assign_entry_station_and_zone(entry_station, entry_zone)
+    journey.assign_exit_station_and_zone(exit_station, entry_zone)
+    expect(journey.read_fare).to eq(1)
+  end
+
+  it 'can calculate a fare from zone 1 to zones 5' do
+    journey.assign_entry_station_and_zone(entry_station, 1)
+    journey.assign_exit_station_and_zone(exit_station, 5)
+    journey.calculate_fare
+    expect(journey.read_fare).to eq(5)
   end
 end

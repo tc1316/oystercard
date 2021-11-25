@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'station'
-require 'oystercard'
 
 describe Station do
   let(:station) { described_class.new('Aldgate East', 1) }
