@@ -9,21 +9,19 @@ class JourneyLog
     @journey_class = journey_class
   end
  
-  def start(entry_station)
+  def start(entry_station=nil, entry_zone=nil)
     current_journey
-    if @journeys.include?(@journey)
-      @journey = @journey_class.new
-    end
-    @journey.assign_entry_station(entry_station)
+    @journey = @journey_class.new if @journeys.include?(@journey)
+    @journey.assign_entry_station_and_zone(entry_station, entry_zone)
     @journeys << @journey
   end
 
-  def finish(exit_station)
+
+  def finish(exit_station=nil, exit_zone=nil)
     current_journey
-    unless @journeys.include?(@journey)
-      @journeys << @journey
-    end
-    @journey.assign_exit_station(exit_station)
+    @journeys << @journey unless @journeys.include?(@journey)
+    @journey.assign_exit_station_and_zone(exit_station, exit_zone)
+    @journey.calculate_fare
     @journey = nil
   end
 
