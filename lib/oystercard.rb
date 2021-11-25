@@ -10,7 +10,6 @@ class Oystercard
   def initialize(balance=0)
     @balance = balance
     @in_journey = false
-    @journey = nil
     @journey_log = JourneyLog.new
   end
 

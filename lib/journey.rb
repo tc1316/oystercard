@@ -40,8 +40,4 @@ class Journey
   private  
   attr_reader :entry_station, :exit_station, :fare
 
-  def deduct(fare=FARE)
-    @balance -= fare
-  end
-
 end
