@@ -105,4 +105,20 @@ describe Oystercard do
     oystercard.touch_in(station1)
     expect(oystercard.journey_log.journeys.length).to be(1)
   end
+
+  it 'penalizes touching in twice in a row without touching out' do
+    oystercard.top_up(Journey::PENALTY_FARE*2)
+    oystercard.touch_in(station1)
+    oystercard.touch_in(station1)
+    oystercard.touch_out(station2)
+    expect(oystercard.balance).to eq(Journey::PENALTY_FARE*2 - Journey::PENALTY_FARE - Journey::DEFAULT_FARE)
+  end
+
+  it 'penalizes touching out twice in a row without touching in' do
+    oystercard.top_up(Journey::PENALTY_FARE*2)
+    oystercard.touch_in(station1)
+    oystercard.touch_out(station2)
+    oystercard.touch_out(station2)
+    expect(oystercard.balance).to eq(Journey::PENALTY_FARE*2 - Journey::PENALTY_FARE - Journey::DEFAULT_FARE)
+  end
 end

@@ -3,7 +3,7 @@
 require_relative './journey_log'
 require_relative './station'
 
-# Stores balance, state of journey and initializes a JourneyLog object which itself contains Journey objects
+# Stores balance, state of journey and initializes a JourneyLog object. 
 class Oystercard
   MAX_BALANCE = 90
   MIN_BALANCE = 1
@@ -29,27 +29,37 @@ class Oystercard
     entry_zone = station.zone
 
     @journey_log.start(entry_station, entry_zone)
-    if @in_journey == true
-      @journey_log.journeys[PREVIOUS_JOURNEY].calculate_fare
-      deduct(@journey_log.journeys[PREVIOUS_JOURNEY].read_fare)
-    end
+
+    penalize_not_touching_out
+
     @in_journey = true
   end
 
   def touch_out(station)
     exit_station = station.name 
     exit_zone = station.zone
-    if @in_journey == false
-      @journey_log.start(nil)
-      @journey_log.journey.calculate_fare
-    end
+    penalize_not_touching_in
     @journey_log.finish(exit_station, exit_zone)
     deduct(@journey_log.journeys[CURRENT_JOURNEY].read_fare)
     @in_journey = false
   end
 
+  def penalize_not_touching_out
+    if @in_journey == true
+      @journey_log.journeys[PREVIOUS_JOURNEY].calculate_fare
+      deduct(@journey_log.journeys[PREVIOUS_JOURNEY].read_fare)
+    end
+  end
+
+  def penalize_not_touching_in
+    if @in_journey == false
+      @journey_log.start(nil)
+      @journey_log.journey.calculate_fare
+    end
+  end
+
   def in_journey?
-    @in_journey
+    @in_journey.dup
   end
 
   private
