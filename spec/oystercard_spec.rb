@@ -4,8 +4,8 @@ require 'oystercard'
 
 describe Oystercard do
   subject(:oystercard) { described_class.new }
-  let(:station1) { double(:name => 'Aldgate East', :zone => 1) }
-  let(:station2) { double(:name => 'Tower Hill', :zone => 1) }
+  let(:station1) { double(name: 'Aldgate East', zone: 1) }
+  let(:station2) { double(name: 'Tower Hill', zone: 1) }
 
   context 'initializes' do
     it 'with a default balance of 0' do
@@ -70,8 +70,8 @@ describe Oystercard do
       oystercard.top_up(Oystercard::MIN_BALANCE)
       oystercard.touch_in(station1)
       expect { oystercard.touch_out(station2) }.to change {
-                                                                    oystercard.balance
-                                                                  }.by(-Oystercard::MIN_BALANCE)
+                                                     oystercard.balance
+                                                   }.by(-Oystercard::MIN_BALANCE)
     end
   end
   #   it 'adds the exit station to the journey' do
@@ -107,18 +107,18 @@ describe Oystercard do
   end
 
   it 'penalizes touching in twice in a row without touching out' do
-    oystercard.top_up(Journey::PENALTY_FARE*2)
+    oystercard.top_up(Journey::PENALTY_FARE * 2)
     oystercard.touch_in(station1)
     oystercard.touch_in(station1)
     oystercard.touch_out(station2)
-    expect(oystercard.balance).to eq(Journey::PENALTY_FARE*2 - Journey::PENALTY_FARE - Journey::DEFAULT_FARE)
+    expect(oystercard.balance).to eq(Journey::PENALTY_FARE * 2 - Journey::PENALTY_FARE - Journey::DEFAULT_FARE)
   end
 
   it 'penalizes touching out twice in a row without touching in' do
-    oystercard.top_up(Journey::PENALTY_FARE*2)
+    oystercard.top_up(Journey::PENALTY_FARE * 2)
     oystercard.touch_in(station1)
     oystercard.touch_out(station2)
     oystercard.touch_out(station2)
-    expect(oystercard.balance).to eq(Journey::PENALTY_FARE*2 - Journey::PENALTY_FARE - Journey::DEFAULT_FARE)
+    expect(oystercard.balance).to eq(Journey::PENALTY_FARE * 2 - Journey::PENALTY_FARE - Journey::DEFAULT_FARE)
   end
 end

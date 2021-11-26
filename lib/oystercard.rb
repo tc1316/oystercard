@@ -3,7 +3,7 @@
 require_relative './journey_log'
 require_relative './station'
 
-# Stores balance, state of journey and initializes a JourneyLog object. 
+# Stores balance, state of journey and initializes a JourneyLog object.
 class Oystercard
   MAX_BALANCE = 90
   MIN_BALANCE = 1
@@ -20,12 +20,14 @@ class Oystercard
 
   def top_up(amount)
     raise "Cannot top up beyond #{Oystercard::MAX_BALANCE}" if full?(amount)
+
     @balance += amount
   end
 
   def touch_in(station)
     raise "Balance below minimum of #{Oystercard::MIN_BALANCE}" unless min?
-    entry_station = station.name 
+
+    entry_station = station.name
     entry_zone = station.zone
 
     @journey_log.start(entry_station, entry_zone)
@@ -36,11 +38,15 @@ class Oystercard
   end
 
   def touch_out(station)
-    exit_station = station.name 
+    exit_station = station.name
     exit_zone = station.zone
+
     penalize_not_touching_in
+
     @journey_log.finish(exit_station, exit_zone)
+
     deduct(@journey_log.journeys[CURRENT_JOURNEY].read_fare)
+
     @in_journey = false
   end
 
